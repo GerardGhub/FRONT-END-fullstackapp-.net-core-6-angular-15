@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Employee } from 'src/app/models/employee';
 import { EmployeesService } from 'src/app/services/employees.service';
 
@@ -19,7 +19,8 @@ export class EditEmployeeComponent implements OnInit {
     email: ''
   };
 
-  constructor(private route: ActivatedRoute, private employeeService: EmployeesService) {
+  constructor(private route: ActivatedRoute, private employeeService: EmployeesService,
+    private router: Router) {
 
   }
 
@@ -45,7 +46,26 @@ export class EditEmployeeComponent implements OnInit {
 
 
   updateEmployee() {
-    
+    this.employeeService.updateEmployee(this.employeeDetails.id, this.employeeDetails).subscribe({
+      next: (response) => {
+        this.router.navigate(['employees']);
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    })
+  }
+
+  deleteEmployee(id: string) {
+    this.employeeService.deleteEmployee(id)
+    .subscribe({
+      next: (response) => {
+        this.router.navigate(['employees']);
+      },
+      error: (response) => {
+        console.log(response);
+      }
+    })
   }
 
 }
